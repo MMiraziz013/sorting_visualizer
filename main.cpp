@@ -442,7 +442,7 @@ void displaySplashScreen() {
     |     * Miraziz  Mirvaliyev                                    |
     |     * Ulugbek  Suleymonov                                    |
     |                                                              |
-    |   Subject: Data Structures                                   |
+    |   Subject: Data Structures II                                |
     |                                                              |
     +==============================================================+
     )" << Color::RESET;
@@ -462,12 +462,12 @@ void displayExitScreen() {
     |                                                              |
     |                    THANK YOU FOR USING                       |
     |                                                              |
-    |             GRAPHICAL SORTING VISUALIZER                     |
+    |                GRAPHICAL SORTING VISUALIZER                  |
     |                                                              |
     +==============================================================+
     |                                                              |
     |   Project by: Miraziz & Ulugbek                              |
-    |   Subject: Data Structures                                   |
+    |   Subject: Data Structures II                                |
     |                                                              |
     +==============================================================+
     )" << Color::RESET << endl;
@@ -563,10 +563,10 @@ int displayMainMenu() {
     int selectedOption = 0;
     const int numOptions = 4;
     string options[] = {
-        "Bubble Sort Visualization",
-        "Insertion Sort Visualization", 
-        "Quick Sort Visualization",
-        "Exit"
+        "Bubble Sort Visualization ",
+        "Insertion Sort Visualization ", 
+        "Quick Sort Visualization ",
+        "Exit "
     };
     
     while (true) {
@@ -605,7 +605,7 @@ int displayMainMenu() {
                 cout << Color::RESET;
             }
             
-            cout << Color::CYAN << "|" << Color::RESET << endl;
+            cout << Color::CYAN << " |" << Color::RESET << endl;
             cout << "    " << Color::CYAN << "|" << Color::RESET << "                                        " << Color::CYAN << "|" << Color::RESET << endl;
         }
         
