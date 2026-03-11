@@ -559,6 +559,74 @@ void bubbleSortVisualized(vector<int>& arr) {
     cout << "  - Total Steps: " << stepCount << endl;
 }
 
+/*
+ INSERTION SORT with step-by-step visualization
+ */
+void insertionSortVisualized(vector<int>& arr) {
+    int n = arr.size();
+    int totalComparisons = 0;
+    int totalShifts = 0;
+    int stepCount = 0;
+    
+    displayFrame(arr, -1, -1, "Initial array - Starting Insertion Sort", "compare");
+    animationDelay(1000);
+    
+    // If the first element is already "sorted"
+    displayFrame(arr, 0, -1, "First element arr[0]=" + to_string(arr[0]) + 
+                 " is already sorted", "sorted");
+    animationDelay(800);
+    
+    for (int i = 1; i < n; i++) {
+        int key = arr[i];
+        int j = i - 1;
+        
+        stepCount++;
+        
+        string msg = "Picking key = " + to_string(key) + " at index " + to_string(i);
+        displayFrame(arr, i, -1, msg, "pivot");
+        animationDelay(800);
+        
+        // main comparing and shifting process
+        while (j >= 0 && arr[j] > key) {
+            totalComparisons++;
+            
+            // Show comparison
+            msg = "Comparing key=" + to_string(key) + " with arr[" + 
+                  to_string(j) + "]=" + to_string(arr[j]);
+            displayFrame(arr, j, i, msg, "compare");
+            animationDelay();
+            
+            // Shift element
+            arr[j + 1] = arr[j];
+            totalShifts++;
+            
+            msg = "Shifting arr[" + to_string(j) + "]=" + to_string(arr[j]) + " to right";
+            displayFrame(arr, j, j + 1, msg, "swap");
+            animationDelay();
+            
+            j--;
+        }
+        
+        if (j >= 0) {
+            totalComparisons++;
+        }
+        
+        // Insert key at correct position
+        arr[j + 1] = key;
+        msg = "Inserting key=" + to_string(key) + " at index " + to_string(j + 1);
+        displayFrame(arr, j + 1, -1, msg, "sorted");
+        animationDelay(800);
+    }
+    
+    displayFrame(arr, -1, -1, "Insertion Sort Complete!", "sorted", 0);
+    cout << endl;
+    cout << "  " << Color::GREEN << "Statistics:" << Color::RESET << endl;
+    cout << "  - Total Comparisons: " << totalComparisons << endl;
+    cout << "  - Total Shifts: " << totalShifts << endl;
+    cout << "  - Total Steps: " << stepCount << endl;
+}
+
+
 int displayMainMenu() {
     int selectedOption = 0;
     const int numOptions = 4;
@@ -659,6 +727,11 @@ int main() {
             }
             case 2: {
                 // Insertion Sort
+                vector<int> arr = getArrayInput();
+                insertionSortVisualized(arr);
+                cout << endl << "    " << Color::YELLOW << "Press any key to return to menu..." << Color::RESET;
+                getKeyPress();
+                break;
                 break;
             }
             case 3: {
