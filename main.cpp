@@ -559,73 +559,99 @@ void bubbleSortVisualized(vector<int>& arr) {
     cout << "  - Total Steps: " << stepCount << endl;
 }
 
-/*
- INSERTION SORT with step-by-step visualization
- */
-void insertionSortVisualized(vector<int>& arr) {
-    int n = arr.size();
-    int totalComparisons = 0;
-    int totalShifts = 0;
-    int stepCount = 0;
+int partitionVisualized(vector<int>& arr, int low, int high, 
+                        int& totalComparisons, int& totalSwaps) {
+    int pivot = arr[high];
     
-    displayFrame(arr, -1, -1, "Initial array - Starting Insertion Sort", "compare");
-    animationDelay(1000);
-    
-    // If the first element is already "sorted"
-    displayFrame(arr, 0, -1, "First element arr[0]=" + to_string(arr[0]) + 
-                 " is already sorted", "sorted");
+    string msg = "Selecting pivot = " + to_string(pivot) + " at index " + to_string(high);
+    displayFrame(arr, high, -1, msg, "pivot");
     animationDelay(800);
     
-    for (int i = 1; i < n; i++) {
-        int key = arr[i];
-        int j = i - 1;
+    int i = low - 1;
+    
+    for (int j = low; j < high; j++) {
+        totalComparisons++;
         
-        stepCount++;
+        msg = "Comparing arr[" + to_string(j) + "]=" + to_string(arr[j]) + 
+              " with pivot=" + to_string(pivot);
+        displayFrame(arr, j, high, msg, "compare");
+        animationDelay();
         
-        string msg = "Picking key = " + to_string(key) + " at index " + to_string(i);
-        displayFrame(arr, i, -1, msg, "pivot");
-        animationDelay(800);
-        
-        // main comparing and shifting process
-        while (j >= 0 && arr[j] > key) {
-            totalComparisons++;
-            
-            // Show comparison
-            msg = "Comparing key=" + to_string(key) + " with arr[" + 
-                  to_string(j) + "]=" + to_string(arr[j]);
-            displayFrame(arr, j, i, msg, "compare");
-            animationDelay();
-            
-            // Shift element
-            arr[j + 1] = arr[j];
-            totalShifts++;
-            
-            msg = "Shifting arr[" + to_string(j) + "]=" + to_string(arr[j]) + " to right";
-            displayFrame(arr, j, j + 1, msg, "swap");
-            animationDelay();
-            
-            j--;
+        if (arr[j] <= pivot) {
+            i++;
+            if (i != j) {
+                msg = "Swapping arr[" + to_string(i) + "]=" + to_string(arr[i]) + 
+                      " with arr[" + to_string(j) + "]=" + to_string(arr[j]);
+                displayFrame(arr, i, j, msg, "swap");
+                swap(arr[i], arr[j]);
+                totalSwaps++;
+                animationDelay();
+            }
         }
-        
-        if (j >= 0) {
-            totalComparisons++;
-        }
-        
-        // Insert key at correct position
-        arr[j + 1] = key;
-        msg = "Inserting key=" + to_string(key) + " at index " + to_string(j + 1);
-        displayFrame(arr, j + 1, -1, msg, "sorted");
-        animationDelay(800);
     }
     
-    displayFrame(arr, -1, -1, "Insertion Sort Complete!", "sorted", 0);
+    // place pivot in correct position
+    if (i + 1 != high) {
+        msg = "Placing pivot " + to_string(pivot) + " at its correct position " + to_string(i + 1);
+        displayFrame(arr, i + 1, high, msg, "swap");
+        swap(arr[i + 1], arr[high]);
+        totalSwaps++;
+        animationDelay();
+    }
+    
+    msg = "Pivot " + to_string(arr[i + 1]) + " is now at correct position " + to_string(i + 1);
+    displayFrame(arr, i + 1, -1, msg, "sorted");
+    animationDelay(800);
+    
+    return i + 1;
+}
+
+void quickSortVisualized(vector<int>& arr) {
+    int n = arr.size();
+    int totalComparisons = 0;
+    int totalSwaps = 0;
+    
+    displayFrame(arr, -1, -1, "Initial array - Starting Quick Sort (Iterative with Stack)", "compare");
+    animationDelay(1000);
+    
+    stack<pair<int, int>> stk;
+    
+    stk.push({0, n - 1});
+    
+    cout << "  " << Color::CYAN << "Using Stack to track subarrays to sort" << Color::RESET << endl;
+    animationDelay(500);
+    
+    while (!stk.empty()) {
+        pair<int, int> range = stk.top();
+        stk.pop();
+        
+        int low = range.first;
+        int high = range.second;
+        
+        if (low < high) {
+            string msg = "Processing subarray from index " + to_string(low) + 
+                        " to " + to_string(high);
+            displayFrame(arr, low, high, msg, "compare");
+            animationDelay(600);
+            
+            int pi = partitionVisualized(arr, low, high, totalComparisons, totalSwaps);
+            
+            // push subarrays to stack
+            if (pi - 1 > low) {
+                stk.push({low, pi - 1});
+            }
+            if (pi + 1 < high) {
+                stk.push({pi + 1, high});
+            }
+        }
+    }
+    
+    displayFrame(arr, -1, -1, "Quick Sort Complete!", "sorted", 0);
     cout << endl;
     cout << "  " << Color::GREEN << "Statistics:" << Color::RESET << endl;
     cout << "  - Total Comparisons: " << totalComparisons << endl;
-    cout << "  - Total Shifts: " << totalShifts << endl;
-    cout << "  - Total Steps: " << stepCount << endl;
+    cout << "  - Total Swaps: " << totalSwaps << endl;
 }
-
 
 int displayMainMenu() {
     int selectedOption = 0;
